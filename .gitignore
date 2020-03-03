@@ -4,3 +4,10 @@ lesson_1/gradle
 lesson_1/.gradle
 lesson_1/gradlew
 lesson_1/gradlew.bat
+
+lesson_2/build
+lesson_2/.idea
+lesson_2/gradle
+lesson_2/.gradle
+lesson_2/gradlew
+lesson_2/gradlew.bat
