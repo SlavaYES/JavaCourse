@@ -33,13 +33,6 @@ public class Main {
 }
 
 
-// insert
-//        Document newDoc = new Document("name", "Dima").append("age", 22)
-//                .append("prof", new Document("title", "Dev")
-//                        .append("description", "Test"));
-//
-//        collection.insertOne(newDoc);
-//        collection.insertMany(listManu);
 
 // update
 //        BasicDBObject searchOgj = new BasicDBObject();

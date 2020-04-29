@@ -1,5 +1,4 @@
 import com.mongodb.BasicDBObject;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
@@ -64,33 +63,70 @@ public class ServerThread implements Runnable {
 
 
         if (splitRequest[0].equals("GET")) {
-            String[] REST = splitRequest[1].split("/");
+            String[] REST = splitRequest[1].split("\\W");
+            System.out.println(splitRequest[1]);
             for (String rest : REST) {
                 System.out.println(rest);
             }
+            String head;
             switch (REST[1]) {
+//             REST [ 0  1 ]
+//                    /info
                 case "info":
                     StringBuilder JSON = new StringBuilder();
                     for (Document doc : collection.find()) {
-                        JSON.append(doc.toJson());
+                        JSON.append(doc.toJson() + "\r\n");
                         System.out.println(doc.toJson());
                     }
-                    String head = "HTTP /1.1 200 OK + \r\n" +
+                    head = "HTTP /1.1 200 OK + \r\n" +
                             "Content-Type: application/json\r\n" +
                             "Content-Length: ";
                     out.println(head + JSON.length() + "\r\n\r\n" + JSON);
-
                     break;
+//             REST [ 0   1    2     3         4        5 ]
+//                    /insert?name=Vyacheslav&phone=89134870834
                 case "insert":
-
+                    Document insert = new Document("name", REST[3]).append("phone", REST[5]);
+                    collection.insertOne(insert);
                     break;
+//             REST [ 0   1    2     3         4        5 ]
+//                    /update?name=Vaycheslav&phone=23563463466
                 case "update":
+                    BasicDBObject search = new BasicDBObject().append("name", REST[3]);
+                    BasicDBObject changed = new BasicDBObject();
+                    changed.append("$set", new BasicDBObject("phone", REST[5]));
+                    collection.updateMany(search, changed);
                     break;
+//             REST [ 0   1    2     3        ]
+//                    /delete?name=Vaycheslav
                 case "delete":
+                    BasicDBObject delete = new BasicDBObject();
+                    delete.append("name", REST[3]);
+                    collection.deleteMany(delete);
                     break;
                 default:
-                    break;
+                    String WRONG = "<!DOCTYPE><html><body style=\"color: #4caf50; fon-family: " +
+                            "Arial; font-size: 20px\"><center>Sorry</center></body></html>";
+                    head = "HTTP /1.1 404 Not Found + \r\n" +
+                            "Content-Type: text/html\r\n" +
+                            "Content-Length: ";
+                    out.println(head + WRONG.length() + "\r\n\r\n" + WRONG);
+                    try {
+                        client.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return;
             }
+            StringBuilder JSON = new StringBuilder();
+            for (Document doc : collection.find()) {
+                JSON.append(doc.toJson()).append("\r\n");
+                System.out.println(doc.toJson());
+            }
+            head = "HTTP /1.1 200 OK + \r\n" +
+                    "Content-Type: application/json\r\n" +
+                    "Content-Length: ";
+            out.println(head + JSON.length() + "\r\n\r\n" + JSON);
         }
 
         try {
