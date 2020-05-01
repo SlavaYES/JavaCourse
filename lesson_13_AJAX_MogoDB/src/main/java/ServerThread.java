@@ -43,66 +43,64 @@ public class ServerThread implements Runnable {
         StringBuilder response = new StringBuilder();
         String JSON = "";
 
-        if (splitRequest[0].equals("GET")) {
-            String[] REST = splitRequest[1].split("\\W");
-            System.out.println(splitRequest[1]);
-            for (String rest : REST) {
-                System.out.println(rest);
-            }
-            String head;
-            switch (REST[1]) {
+        String[] REST = splitRequest[1].split("\\W");
+        for (String rest : REST) {
+            System.out.println(rest);
+        }
+
+        switch (REST[1]) {
 //             REST [ 0  1 ]
 //                    /info
-                case "info":
-                    for (Document doc : collection.find()) {
-                        response.append(doc.toJson());
-                        response.append(",");
-                    }
-
-                    JSON += response.toString().substring(0, response.length() - 1);
-                    head = "HTTP /1.1 200 OK\n" +
-                            "Content-Type: application/json\n" +
-                            "Access-Control-Allow-Origin: *\n" +
-                            "\n" + "[" + JSON + "]";
-                    out.println(head);
-                    break;
+//                for (Document doc : collection.find()) {
+//                    response.append(doc.toJson());
+//                    response.append(",");
+//                }
+//
+//                JSON += response.toString().substring(0, response.length() - 1);
+//                setResponse(JSON);
+//                break;
 //             REST [ 0   1    2     3         4        5 ]
 //                    /insert?name=Vyacheslav&phone=89134870834
-                case "insert":
-                    Document insert = new Document("name", REST[3]).append("phone", REST[5]);
-                    collection.insertOne(insert);
-                    break;
+            case "insert":
+                Document insert = new Document("name", REST[3]).append("phone", REST[5]);
+                collection.insertOne(insert);
+                break;
 //             REST [ 0   1    2     3         4        5 ]
 //                    /update?name=Vaycheslav&phone=23563463466
-                case "update":
-                    BasicDBObject search = new BasicDBObject().append("name", REST[3]);
-                    BasicDBObject changed = new BasicDBObject();
-                    changed.append("$set", new BasicDBObject("phone", REST[5]));
-                    collection.updateMany(search, changed);
-                    break;
+            case "update":
+                BasicDBObject search = new BasicDBObject().append("name", REST[3]);
+                BasicDBObject changed = new BasicDBObject();
+                changed.append("$set", new BasicDBObject("phone", REST[5]));
+                collection.updateMany(search, changed);
+                break;
 //             REST [ 0   1    2     3        ]
 //                    /delete?name=Vaycheslav
-                case "delete":
-                    BasicDBObject delete = new BasicDBObject();
-                    delete.append("name", REST[3]);
-                    collection.deleteMany(delete);
-                    break;
-            }
-//            StringBuilder JSON = new StringBuilder();
-//            for (Document doc : collection.find()) {
-//                JSON.append(doc.toJson()).append(",");
-//            }
-//            System.out.println(JSON);
-//            head = "HTTP /1.1 200 OK + \r\n" +
-//                    "Content-Type: application/json\r\n" +
-//                    "Access-Control-Allow-Origin: *\r\n" +
-//                    "Content-Length: ";
-//            out.println(head + JSON.length() + "\r\n\r\n" + JSON);
+            case "delete":
+                BasicDBObject delete = new BasicDBObject();
+                delete.append("name", REST[3]);
+                collection.deleteMany(delete);
+                break;
         }
+        for (Document doc : collection.find()) {
+            response.append(doc.toJson());
+            response.append(",");
+        }
+
+        JSON += response.toString().substring(0, response.length() - 1);
+        setResponse(JSON);
+
         try {
             client.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setResponse(String json) {
+        String page = "HTTP /1.1 200 OK\n" +
+                "Content-Type: application/json\n" +
+                "Access-Control-Allow-Origin: *\n" +
+                "\n" + "[" + json + "]";
+        out.println(page);
     }
 }
