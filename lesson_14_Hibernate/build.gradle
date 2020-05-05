@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.17'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.15.Final'
+
+}
+
+run {
+    standardInput = System.in
+}
+
+mainClassName = 'Main'
