@@ -1,5 +1,6 @@
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
+import lombok.*;
 import org.bson.Document;
 
 import java.io.IOException;
@@ -7,17 +8,38 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Класс для обработки потомков сервера
+ * @author Vyacheslav Dopchuk "voen1999@gmail.com"
+ * @version 0.2
+ */
+@Setter @Getter
+@NoArgsConstructor
+@ToString
 public class ServerThread implements Runnable {
+    /** Client's socket */
     private Socket client = null;
+    /** Input */
     private static Scanner in = null;
+    /** Output */
     private static PrintWriter out = null;
+    /** MongoDB collection */
     private static MongoCollection<Document> collection = null;
 
+    /**
+     * Constructor
+     * @param client Socket for client
+     */
     public ServerThread(Socket client) throws IOException {
         this.client = client;
         in = new Scanner(client.getInputStream());
         out = new PrintWriter(client.getOutputStream(), true);
     }
+    /**
+     * Constructor
+     * @param client Socket client
+     * @param collection MongoDB data
+     */
     public ServerThread(Socket client, MongoCollection<Document> collection) throws IOException {
         this.client = client;
         in = new Scanner(client.getInputStream());
@@ -25,14 +47,9 @@ public class ServerThread implements Runnable {
         ServerThread.collection = collection;
     }
 
-    public static MongoCollection<Document> getCollection() {
-        return collection;
-    }
-
-    public static void setCollection(MongoCollection<Document> collection) {
-        ServerThread.collection = collection;
-    }
-
+    /**
+     * Function for processing client
+     */
     @Override
     public void run() {
 

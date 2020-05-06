@@ -16,6 +16,9 @@ run {
 
 dependencies {
     compile group: 'org.mongodb', name: 'mongodb-driver', version: '3.12.3'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+
 }
 
 mainClassName = 'Main'

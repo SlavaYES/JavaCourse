@@ -1,40 +1,22 @@
+import lombok.*;
+
+
+/**
+ * Класс описывающий <b>Пользователя</b>
+ * @author Vyacheslav Dopchuk "voen1999@gmail.com"
+ * @version 0.2
+ * @see Main
+ */
 //POJO
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 class User {
+    /** Поле идентификатор */
     protected int id;
+    /** Поле имени */
     protected String name;
     protected String phone;
-
-    public User(int id, String name, String phone) {
-        this.id = id;
-        this.name = name;
-        this.phone = phone;
-    }
-
-    public User() {
-
-    }
-
-    int getId() {
-        return id;
-    }
-
-    String getName() {
-        return name;
-    }
-
-    String getPhone() {
-        return phone;
-    }
-
-    void setId(int id) {
-        this.id = id;
-    }
-
-    void setName(String name) {
-        this.name = name;
-    }
-
-    void setPhone(String phone) {
-        this.phone = phone;
-    }
 }
