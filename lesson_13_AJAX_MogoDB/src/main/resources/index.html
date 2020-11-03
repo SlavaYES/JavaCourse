@@ -171,12 +171,24 @@
 </head>
 <body>
     <div align="center">
-        <h2>Привет, Гость!</h2>
-        <h3>Давай к нам</h3>
+        <h2>Привет, Тренер!</h2>
+        <h3>Как твои ученики?</h3>
     </div>
     <div class="insertDiv" align="center">
         <input id="name" type="text" class="nameInsert" placeholder="Введите Имя"><br>
-        <input id="phone" type="number" class="phoneInsert" placeholder="Введите Телефон">
+        <input id="phone" type="number" class="phoneInsert" placeholder="Введите Телефон"><br>
+        <select class="statusInsert">
+            <option>Будет заниматься</option>
+            <option>Занимается</option>
+            <option>Закончил</option>
+        </select><br>
+        <select class="levelInsert">
+            <option>Легкий тренинг</option>
+            <option>Средняя тренировка</option>
+            <option>Тяжелые нагрузки</option>
+        </select><br>
+        <input type="number" class="updateInsert" placeholder="Успеваемость[0/10]"><br>
+        <input type="text" class="commentInsert" placeholder="Введите комментарий"><br>
     </div>
     <div class="buttons" align="center">
         <span type="button" class="buttonInsert"  id="buttonInsertId"  onclick="setUser()">Вставить</span>

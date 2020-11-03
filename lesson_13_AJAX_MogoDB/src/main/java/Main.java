@@ -22,8 +22,8 @@ public class Main {
         server = new ServerSocket(8081);
 
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
-        MongoDatabase db = mongoClient.getDatabase("user");
-        MongoCollection<Document> collection = db.getCollection("profile");
+        MongoDatabase db = mongoClient.getDatabase("trainer");
+        MongoCollection<Document> collection = db.getCollection("coach");
 
         while (true) {
             client = server.accept();
@@ -31,26 +31,3 @@ public class Main {
         }
     }
 }
-
-
-
-// update
-//        BasicDBObject searchOgj = new BasicDBObject();
-//        searchOgj.append("age", 22);
-//
-//        BasicDBObject changeObj = new BasicDBObject();
-//        changeObj.append("$set", new BasicDBObject().append("age", 23));
-//
-//
-//        collection.updateOne(searchOgj, changeObj);
-
-// delete
-
-//        BasicDBObject searchObj = new BasicDBObject();
-//        searchObj.append("age", 20);
-////        collection.deleteMany(); // all
-//        collection.deleteOne(searchObj);
-//
-//        for (Document doc : collection.find()) {
-//            System.out.println(doc.toJson());
-//        }

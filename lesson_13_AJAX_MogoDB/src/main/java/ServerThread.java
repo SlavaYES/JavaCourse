@@ -60,9 +60,9 @@ public class ServerThread implements Runnable {
 //                setResponse(JSON);
 //                break;
 //             REST [ 0   1    2     3         4        5 ]
-//                    /insert?name=Vyacheslav&phone=89134870834
-            case "insert":
-                Document insert = new Document("name", REST[3]).append("phone", REST[5]);
+//                    /insert?name=Vyacheslav&phone=89134870834&status=willbe&level=easy
+            case "insert": // ??
+                Document insert = new Document("name", REST[3]).append("phone", REST[5]).append("status", REST[7]).append("level", REST[9]);
                 collection.insertOne(insert);
                 break;
 //             REST [ 0   1    2     3         4        5 ]
