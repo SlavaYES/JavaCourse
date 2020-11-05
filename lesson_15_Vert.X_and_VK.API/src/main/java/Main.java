@@ -11,6 +11,8 @@ import java.io.UnsupportedEncodingException;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import static io.vertx.core.http.HttpMethod.GET;
+
 public class Main extends NullPointerException {
 
     public static void main(String[] args) throws InterruptedException, UnsupportedEncodingException {
@@ -25,11 +27,18 @@ public class Main extends NullPointerException {
                 .setTrustAll(true);
 
         HttpClient httpClient = vertx.createHttpClient(httpClientOptions);
+        //https://api.vk.com/blank.html#access_token=908e4c4f347b8200383a2467b66371e6bf2ec955923570e07a4a3a696c5497fc6279a48b45a2e1a726010&expires_in=0&user_id=183150940&state=123456
+        Integer user_id = 183150940;
+        httpClient.requestAbs(GET, "https://api.vk.com/method/groups.get?user_id=" + user_id + "&filter=admin&v=5.124&access_token=908e4c4f347b8200383a2467b66371e6bf2ec955923570e07a4a3a696c5497fc6279a48b45a2e1a726010",
+                result -> {
+                    result.result().bodyHandler(body -> {
+                       System.out.println(body.toString());
+                    });
+                })
+                .end();
+        //String[] name = user_name(user_id, httpClient);
 
-        Integer user_id = 184064789;
-        String[] name = user_name(user_id, httpClient);
-
-        System.out.println(name[0] + " " + name[1]);
+        //System.out.println(name[0] + " " + name[1]);
 
         //find(user_id, star_id, httpClient, 0);
 
@@ -44,7 +53,7 @@ public class Main extends NullPointerException {
 
     private static String[] user_name(Integer user_id, HttpClient httpClient) throws InterruptedException {
         AtomicReference<JsonObject> json = new AtomicReference<>(new JsonObject());
-        httpClient.requestAbs(HttpMethod.GET, "https://api.vk.com/method/users.get?user_id=" + user_id + "&name_case=gen&v=5.52&access_token=cb6c579db3bdc7350af5f2b2435cd3098434d7cd8f2588d3be25f6d7cac46802325c1b38cccf7e66fd0fa",
+        httpClient.requestAbs(GET, "https://api.vk.com/method/users.get?user_id=" + user_id + "&name_case=gen&v=5.52&access_token=cb6c579db3bdc7350af5f2b2435cd3098434d7cd8f2588d3be25f6d7cac46802325c1b38cccf7e66fd0fa",
                 result -> result.result().bodyHandler(body -> {
                     System.out.println(body.toString());
                     json.set(body.toJsonObject());
@@ -87,7 +96,7 @@ public class Main extends NullPointerException {
         } while ( i < jsonArray.getList().size() - 1);
         System.out.println(all_friends_user);
 
-        httpClient.requestAbs(HttpMethod.GET, "https://api.vk.com/method/friends.getMutual?source_uid=" + star_id + "&target_uids=" + all_friends_user + "&v=5.124&access_token=cb6c579db3bdc7350af5f2b2435cd3098434d7cd8f2588d3be25f6d7cac46802325c1b38cccf7e66fd0fa",
+        httpClient.requestAbs(GET, "https://api.vk.com/method/friends.getMutual?source_uid=" + star_id + "&target_uids=" + all_friends_user + "&v=5.124&access_token=cb6c579db3bdc7350af5f2b2435cd3098434d7cd8f2588d3be25f6d7cac46802325c1b38cccf7e66fd0fa",
             result -> {
                     result.result().bodyHandler(body -> {
                         System.out.println(body.toString());
@@ -99,7 +108,7 @@ public class Main extends NullPointerException {
     private static boolean is_closed(HttpClient httpClient, Integer user_id) throws InterruptedException {
         boolean is_close;
         AtomicReference<JsonObject> json = new AtomicReference<>(new JsonObject());
-        httpClient.requestAbs(HttpMethod.GET, "https://api.vk.com/method/users.get?user_id=" + user_id + "&v=5.124&access_token=cb6c579db3bdc7350af5f2b2435cd3098434d7cd8f2588d3be25f6d7cac46802325c1b38cccf7e66fd0fa",
+        httpClient.requestAbs(GET, "https://api.vk.com/method/users.get?user_id=" + user_id + "&v=5.124&access_token=cb6c579db3bdc7350af5f2b2435cd3098434d7cd8f2588d3be25f6d7cac46802325c1b38cccf7e66fd0fa",
                 result -> {
                     result.result().bodyHandler(body -> {
                         json.set(body.toJsonObject());
@@ -118,7 +127,7 @@ public class Main extends NullPointerException {
 
     private static JsonArray getFriend(HttpClient httpClient, Integer user_id) throws InterruptedException {
         AtomicReference<JsonObject> json = new AtomicReference<>(new JsonObject());
-        httpClient.requestAbs(HttpMethod.GET, "https://api.vk.com/method/friends.get?user_id=" + user_id + "&v=5.52&access_token=e794b816e794b816e794b816d4e7e449e5ee794e794b816b904a9717ecf54c9bbcff785",
+        httpClient.requestAbs(GET, "https://api.vk.com/method/friends.get?user_id=" + user_id + "&v=5.52&access_token=e794b816e794b816e794b816d4e7e449e5ee794e794b816b904a9717ecf54c9bbcff785",
                 result -> {
                     result.result().bodyHandler(body -> {
                         json.set(body.toJsonObject());
@@ -137,7 +146,7 @@ public class Main extends NullPointerException {
 
     static String findUserId(HttpClient httpClient, String name) throws InterruptedException {
         AtomicReference<JsonObject> json = new AtomicReference<>(new JsonObject());
-        httpClient.requestAbs(HttpMethod.GET, "https://api.vk.com/method/utils.resolveScreenName?screen_name=" + name + "&v=5.52&access_token=e794b816e794b816e794b816d4e7e449e5ee794e794b816b904a9717ecf54c9bbcff785",
+        httpClient.requestAbs(GET, "https://api.vk.com/method/utils.resolveScreenName?screen_name=" + name + "&v=5.52&access_token=e794b816e794b816e794b816d4e7e449e5ee794e794b816b904a9717ecf54c9bbcff785",
                 result -> {
                     if (result.succeeded()) {
                         result.result().bodyHandler(body -> {
