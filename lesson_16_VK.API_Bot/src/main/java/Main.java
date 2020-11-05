@@ -43,7 +43,7 @@ public class Main {
 
         keyboard.setButtons(allKey);
 
-        GroupActor actor = new GroupActor(199983583, "a5938e0ddc975175aab32747f4e2787b9c8863118585df92ebf0e502e353e4f5ec9b9181322b0862820aa");
+        GroupActor actor = new GroupActor(199983533, "a5938e0ddc975175aab32747f4e2787b9c8863118585df92ebf0e502e353e4f5ec9b9181322b0862820");
         Integer ts = vk.messages().getLongPollServer(actor).execute().getTs(); // time computer message
 
         while (true) {
@@ -148,30 +148,3 @@ public class Main {
 
     }
 }
-
-Держи ссылку {{ "https://lord-filmzz1.lordfilm.link/films/f/p.cat=24/r.god_vyhoda=1915;2019/r.kp_raiting=0;10/sort=date/order=desc/" if %жанр_фильма% == "Комедия" else "https://lord-filmzz1.lordfilm.link/films/f/p.cat=24/r.god_vyhoda=1915;2019/r.kp_raiting=0;10/sort=date/order=desc/"}}
-
-
-// https://api.vk.com/blank.html#expires_in=0&access_token_199983583=9d4cbc4e2c38de58827cf0fcece9b405ba52b2d795246e35685567247f109a642fd93475bc474890e59aa
-
-//if (!messages.isEmpty()) { // if message not empty
-//        messages.forEach(message -> { // move of messages
-//        if (!message.isOut()) {
-//        System.out.println(message.toString());
-//        String text = message.getText();
-//        PrintStream printStream = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-//        printStream.println(text);
-//
-//        try {
-//        vk.messages().send(actor).message("Проходи по ссылки").userId(message.getFromId())
-//        .attachment("http://youtube.com")
-//        .randomId(random.nextInt(10000))
-//        .keyboard(keyboard).execute();
-//        } catch (ApiException e) {
-//        e.printStackTrace();
-//        } catch (ClientException e) {
-//        e.printStackTrace();
-//        }
-//        }
-//        });
-//        }
