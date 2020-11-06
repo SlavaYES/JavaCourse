@@ -1,0 +1,3 @@
+rootProject.name = 'lesson_17_Spring_WebFlux'
+include 'Second_variant_with_Class_UserRouter'
+
