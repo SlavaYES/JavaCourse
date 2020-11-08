@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+mainClassName = 'ru.slava.Main'
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation 'com.github.sealedtx:java-youtube-downloader:2.4.3'
+    testImplementation 'com.github.sealedtx:java-youtube-downloader:2.4.3'
+}
+
+run {
+    standardInput = System.in
+}
