@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+   compile group: 'io.vertx', name: 'vertx-core', version: '4.0.0-milestone4'
+}
+mainClassName = 'Main'

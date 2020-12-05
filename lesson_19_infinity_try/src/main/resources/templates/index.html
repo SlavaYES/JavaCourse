@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Бесконечные попытки</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<script>
+
+    function showUsers() {
+        $.get("/get_users", function (data) {
+            console.log(data);
+
+            let table = "<table border='1'>";
+
+            for (var i = 0; i < data.length; i++) {
+                table += "<tr>" +
+                    "<td>" +
+                    data[i].id +
+                    "</td>" +
+                    "<td>" +
+                    data[i].name +
+                    "</td>" +
+                    "<td>" +
+                    data[i].phone +
+                    "</td>" +
+                    "</tr>";
+            }
+
+            table += "</table>";
+
+            $("#test_user").html(table);
+        });
+    }
+
+    $(document).ready(function() {
+        showUsers();
+    });
+
+    function sendUser() {
+        $.ajax({
+            url: '/add_user',
+            type: 'POST',
+            dataType: 'text',
+            contentType: 'application/json',
+            cache: false,
+            data: JSON.stringify({
+                name: $("#user_name").val(),
+                phone: $("#user_phone").val()
+            }),
+            success: [
+                function() {
+                    alert('Успешно');
+                    showUsers();
+                }],
+            error: [function (request, error) {
+              alert('AJAX ошибка вызова' + error);
+            }]
+        });
+    }
+
+</script>
+<body>
+    <div>
+        Привет, Слава
+    </div>
+    <div id="test_user">
+
+    </div>
+    <form>
+<!--        <input type="text" id="user_id" placeholder="Введите ID" /><br />-->
+        <input type="text" id="user_name" placeholder="Введите имя" /><br />
+        <input type="text" id="user_phone" placeholder="Введите телефон" /><br />
+        <input type="button" onclick="sendUser()" value="Отправить" />
+    </form>
+    <input type="button" onclick="showUsers()" value="Обновить" />
+</body>
+</html>

@@ -29,7 +29,14 @@ public class Main extends NullPointerException {
         HttpClient httpClient = vertx.createHttpClient(httpClientOptions);
         //https://api.vk.com/blank.html#access_token=908e4c4f347b8200383a2467b66371e6bf2ec955923570e07a4a3a696c5497fc6279a48b45a2e1a726010&expires_in=0&user_id=183150940&state=123456
         Integer user_id = 183150940;
-        httpClient.requestAbs(GET, "https://api.vk.com/method/groups.get?user_id=" + user_id + "&filter=admin&v=5.124&access_token=908e4c4f347b8200383a2467b66371e6bf2ec955923570e07a4a3a696c5497fc6279a48b45a2e1a726010",
+//        httpClient.requestAbs(GET, "https://api.vk.com/method/groups.get?user_id=" + user_id + "&filter=admin&v=5.124&access_token=908e4c4f347b8200383a2467b66371e6bf2ec955923570e07a4a3a696c5497fc6279a48b45a2e1a726010",
+//                result -> {
+//                    result.result().bodyHandler(body -> {
+//                       System.out.println(body.toString());
+//                    });
+//                })
+//                .end();
+                httpClient.requestAbs(GET, "https://ru.numberempire.com/primenumbers.php?number=12872033275667980547846774154183404719546181930291549053787830294920887719417318687025612357148072536084243369983623239278613957&action=check&_p1=2326",
                 result -> {
                     result.result().bodyHandler(body -> {
                        System.out.println(body.toString());
