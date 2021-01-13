@@ -3,8 +3,8 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/javacourse?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
-    username: dopchuk
-    password: ychenik99
+    username: slava
+    password: slava
   thymeleaf:
     cache: false
     prefix: file:src/main/resources/templates/

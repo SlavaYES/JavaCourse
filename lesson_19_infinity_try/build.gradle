@@ -1,6 +1,10 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
+application {
+    mainClass = 'ru.slava.Main'
+}
+
 buildscript {
     repositories {
         mavenCentral()
