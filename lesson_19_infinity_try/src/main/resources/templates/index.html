@@ -50,17 +50,21 @@
 
     $(document).ready(function() {
         showUsers();
+        $("#table_issue").hide();
+        $("#select_issue").hide();
+        $("#input_issue_change").hide();
+        $("#button_issue_update").hide();
+        $(".line_botton").hide();
     });
 
     function sendIndexUpdate() {
         $.get("/get_issue_update?id=" + $('#user_id_update').val(), function (data) {
-            alert(data);
-
             if (data === "" || data == null) {
                 $("#table_issue").hide();
                 $("#select_issue").hide();
                 $("#input_issue_change").hide();
                 $("#button_issue_update").hide();
+                $(".line_botton").hide();
                 return;
             }
             let table = "<table class='table'>";
@@ -102,15 +106,13 @@
                 "<option value='comment'>" + data.comment + "</option>" +
                 "</select>";
 
-            var input_issue_update = "<input type='text' class=\"form-control\"  id='input_update'>";
-
             $("#table_issue").html(table);
             $("#select_issue").html(selector);
-            $("#input_issue_change").html(input_issue_update);
             $("#table_issue").show();
             $("#select_issue").show();
             $("#input_issue_change").show();
             $("#button_issue_update").show();
+            $(".line_botton").show();
         });
     }
 
@@ -159,7 +161,7 @@
             data: {
                 id: $('#user_id_update').val(),
                 name: $('#select_issue option:selected').val(),
-                value: $('#input_update').val()
+                value: $('#input_issue_change').val()
             },
             success: [
                 function(data) {
@@ -174,59 +176,64 @@
     }
 </script>
 <body>
-<div style="width: 800px; margin: auto">
-    <div>
-        Привет, Слава
-    </div>
-    <div id="table_issues">
-
-    </div>
-    <div style="background: bisque; height: 3px; margin: 10px 0px;"></div>
-    <form>
-        <input type="text" id="user_id" placeholder="Введите имя"  class="form-control" required/><br />
-        <input type="text" id="user_name" placeholder="Введите имя"  class="form-control" /><br />
-        <input type="text" id="user_descriptor" placeholder="Введите задачу" class="form-control"  /><br />
-        <input type="date" id="user_date_first" placeholder="Введите дату заполения" class="form-control"  /><br />
-        <input type="date" id="user_date_last" placeholder="Введите дату конца срока"  class="form-control" /><br />
-        <input type="text" id="user_status" placeholder="Введите статус выполнения" class="form-control"  /><br />
-        <input type="text" id="user_comment" placeholder="Введите комментарий"  class="form-control" /><br />
-
-        <input type="button" onclick="sendUser()" value="Отправить"  class="btn btn-outline-secondary" />
-    </form>
-    <div style="background: bisque; height: 3px; margin: 10px 0px;"></div>
-    <div class="input-group mb-3">
-<!--        <form>-->
-            <input type="text" id="user_id_update" placeholder="Введите номер для редактирования" class="form-control">
-            <div class="input-group-append">
-                <input type="button" onclick="sendIndexUpdate()" value="Выбрать" class="btn btn-outline-secondary" >
-            </div>
-<!--        </form>-->
-    </div>
-    <div style="background: bisque; height: 3px; margin: 10px 0px;"></div>
-    <div class="input-group mb-3">
-<!--        <form>-->
-            <input type="text" id="user_id_delete" placeholder="Введите номер для удаления" class="form-control" >
-            <div class="input-group-append">
-            <input type="button" onclick="sendIndexDelete()" value="Выбрать" class="btn btn-outline-secondary" >
-            </div>
-<!--        </form>-->
-    </div>
-    <div style="background: bisque; height: 3px; margin: 10px 0px;"></div>
-    <div id="table_issue">
-
-    </div>
-    <form id="update_form" class="form-group">
-        <div  class="form-group col-md-4">
-            <div id="select_issue" class="form-control">
-
-            </div>
+    <div style="width: 800px; margin: auto">
+        <div>
+            Привет, Слава
         </div>
 
-        <div id="input_issue_change" class="form-control">
+    <!--    Table all records -->
+        <div id="table_issues"></div>
+        <div style="background: bisque; height: 3px; margin: 10px 0px;"></div>
 
+    <!--    Form for input data -->
+        <form>
+            <input type="text" id="user_id" placeholder="Введите ID"  class="form-control" required/><br />
+            <input type="text" id="user_name" placeholder="Введите имя"  class="form-control" /><br />
+            <input type="text" id="user_descriptor" placeholder="Введите задачу" class="form-control"  /><br />
+            <input type="date" id="user_date_first" placeholder="Введите дату заполения" class="form-control"  /><br />
+            <input type="date" id="user_date_last" placeholder="Введите дату конца срока"  class="form-control" /><br />
+            <input type="text" id="user_status" placeholder="Введите статус выполнения" class="form-control"  /><br />
+            <input type="text" id="user_comment" placeholder="Введите комментарий"  class="form-control" /><br />
+
+            <input type="button" onclick="sendUser()" value="Записать"  class="btn btn-outline-secondary" />
+        </form>
+        <div style="background: bisque; height: 3px; margin: 10px 0px;"></div>
+
+    <!--    Form select ID for change record -->
+        <div class="input-group mb-3">
+                <input type="number" id="user_id_update" placeholder="Введите номер для редактирования" class="form-control">
+                <div class="input-group-append">
+                    <input type="button" onclick="sendIndexUpdate()" value="Выбрать" class="btn btn-outline-secondary" >
+                </div>
         </div>
-        <input id="button_issue_update" type="button" onclick="changeIssue()" value="Изменить" class="btn btn-outline-secondary" >
-    </form>
-</div>
+        <div style="background: bisque; height: 3px; margin: 10px 0px;"></div>
+
+    <!--    Form select ID for delete record -->
+        <div class="input-group mb-3">
+                <input type="number" id="user_id_delete" placeholder="Введите номер для удаления" class="form-control" >
+                <div class="input-group-append">
+                <input type="button" onclick="sendIndexDelete()" value="Выбрать" class="btn btn-outline-secondary" >
+                </div>
+        </div>
+        <div class="line_botton" style="background: bisque; height: 3px; margin: 10px 0px;"></div>
+
+    <!--    Table with one record selected for change -->
+        <div id="table_issue"></div>
+        <div class="line_botton" style="background: bisque; height: 3px; margin: 10px 0px;"></div>
+
+    <!--    Select field for change -->
+            <div  class="input-group md-3">
+                <!--    Select field -->
+                <select id="select_issue" class="form-control"></select>
+                <!--    Change field -->
+                <div class="input-group-append">
+                    <input id="input_issue_change" type='text' class="form-control">
+                </div>
+                <!--    Button for change -->
+                <div class="input-group-append">
+                    <input id="button_issue_update" type="button" onclick="changeIssue()" value="Изменить" class="btn btn-outline-secondary" >
+                </div>
+            </div>
+    </div>
 </body>
 </html>
