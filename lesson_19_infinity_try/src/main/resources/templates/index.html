@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Бесконечные попытки</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossorigin="anonymous">
+</head>
+<script>
+    function showUsers() {
+        $.get("/get_issues", function (data) {
+            console.log(data);
+
+            let table = "<table class='table'>";
+
+            for (var i = 0; i < data.length; i++) {
+                table += "<tr>" +
+                    "<td>" +
+                    data[i].id +
+                    "</td>" +
+                    "<td>" +
+                    data[i].name +
+                    "</td>" +
+                    "<td>" +
+                    data[i].descriptor +
+                    "</td>" +
+                    "<td>" +
+                    data[i].date_first +
+                    "</td>" +
+                    "<td>" +
+                    data[i].date_last +
+                    "</td>" +
+                    "<td>" +
+                    data[i].status +
+                    "</td>" +
+                    "<td>" +
+                    data[i].comment +
+                    "</td>" +
+                    "</tr>";
+            }
+
+            table += "</table>";
+
+            $("#table_issues").html(table);
+        });
+    }
+
+    $(document).ready(function() {
+        showUsers();
+        $("#table_issue").hide();
+        $("#select_issue").hide();
+        $("#input_issue_change").hide();
+        $("#button_issue_update").hide();
+        $(".line_botton").hide();
+    });
+
+    function sendIndexUpdate() {
+        $.get("/get_issue_update?id=" + $('#user_id_update').val(), function (data) {
+            if (data === "" || data == null) {
+                $("#table_issue").hide();
+                $("#select_issue").hide();
+                $("#input_issue_change").hide();
+                $("#button_issue_update").hide();
+                $(".line_botton").hide();
+                return;
+            }
+            let table = "<table class='table'>";
+
+            table += "<tr>" +
+                "<td>" +
+                data.id +
+                "</td>" +
+                "<td>" +
+                data.name +
+                "</td>" +
+                "<td>" +
+                data.descriptor +
+                "</td>" +
+                "<td>" +
+                data.date_first +
+                "</td>" +
+                "<td>" +
+                data.date_last +
+                "</td>" +
+                "<td>" +
+                data.status +
+                "</td>" +
+                "<td>" +
+                data.comment +
+                "</td>" +
+                "</tr>";
+
+            table += "</table>";
+
+            var selector =
+                "<select id='select_issue' name='selector' class=\"form-control\">" +
+                "<option value='id'>" + data.id + "</option>" +
+                "<option value='name'>" + data.name + "</option>" +
+                "<option value='descriptor'>" + data.descriptor + "</option>" +
+                "<option value='date_first'>" + data.date_first + "</option>" +
+                "<option value='data.date_last'>" + data.date_last + "</option>" +
+                "<option value='status'>" + data.status + "</option>" +
+                "<option value='comment'>" + data.comment + "</option>" +
+                "</select>";
+
+            $("#table_issue").html(table);
+            $("#select_issue").html(selector);
+            $("#table_issue").show();
+            $("#select_issue").show();
+            $("#input_issue_change").show();
+            $("#button_issue_update").show();
+            $(".line_botton").show();
+        });
+    }
+
+    function sendIndexDelete() {
+        $.get("/get_issue_delete?id=" + $('#user_id_delete').val(), function (data) {
+            showUsers();
+        });
+    }
+
+    function sendUser() {
+        var json = JSON.stringify({
+            id: $("#user_id").val(),
+            name: $("#user_name").val(),
+            descriptor: $("#user_descriptor").val(),
+            date_first: $("#user_date_first").val(),
+            date_last: $("#user_date_last").val(),
+            status: $("#user_status").val(),
+            comment: $("#user_comment").val()
+        });
+
+        $.ajax({
+            url: '/add_issue',
+            type: 'POST',
+            dataType: 'text',
+            contentType: 'application/json;charset=utf-8',
+            cache: false,
+            data: json,
+            success: [
+                function(data) {
+                    alert('Успешно ' + document.characterSet + $('#user_name').val());
+                    showUsers();
+                }],
+            error: [function (request, error) {
+              alert('AJAX ошибка вызова' + error);
+            }]
+        });
+    }
+
+    function changeIssue() {
+        $.ajax({
+            url: '/update_issue?',
+            type: 'POST',
+            dataType: 'text',
+            // contentType: 'application/json;charset=utf-8',
+            cache: false,
+            data: {
+                id: $('#user_id_update').val(),
+                name: $('#select_issue option:selected').val(),
+                value: $('#input_issue_change').val()
+            },
+            success: [
+                function(data) {
+                    alert('Успешно');
+                    showUsers();
+                    sendIndexUpdate();
+                }],
+            error: [function (request, error) {
+                alert('AJAX ошибка вызова' + error);
+            }]
+        })
+    }
+</script>
+<body>
+    <div style="width: 800px; margin: auto">
+        <div>
+            Привет, Слава
+        </div>
+
+    <!--    Table all records -->
+        <div id="table_issues"></div>
+        <div style="background: bisque; height: 3px; margin: 10px 0px;"></div>
+
+    <!--    Form for input data -->
+        <form>
+            <input type="text" id="user_id" placeholder="Введите ID"  class="form-control" required/><br />
+            <input type="text" id="user_name" placeholder="Введите имя"  class="form-control" /><br />
+            <input type="text" id="user_descriptor" placeholder="Введите задачу" class="form-control"  /><br />
+            <input type="date" id="user_date_first" placeholder="Введите дату заполения" class="form-control"  /><br />
+            <input type="date" id="user_date_last" placeholder="Введите дату конца срока"  class="form-control" /><br />
+            <input type="text" id="user_status" placeholder="Введите статус выполнения" class="form-control"  /><br />
+            <input type="text" id="user_comment" placeholder="Введите комментарий"  class="form-control" /><br />
+
+            <input type="button" onclick="sendUser()" value="Записать"  class="btn btn-outline-secondary" />
+        </form>
+        <div style="background: bisque; height: 3px; margin: 10px 0px;"></div>
+
+    <!--    Form select ID for change record -->
+        <div class="input-group mb-3">
+                <input type="number" id="user_id_update" placeholder="Введите номер для редактирования" class="form-control">
+                <div class="input-group-append">
+                    <input type="button" onclick="sendIndexUpdate()" value="Выбрать" class="btn btn-outline-secondary" >
+                </div>
+        </div>
+        <div style="background: bisque; height: 3px; margin: 10px 0px;"></div>
+
+    <!--    Form select ID for delete record -->
+        <div class="input-group mb-3">
+                <input type="number" id="user_id_delete" placeholder="Введите номер для удаления" class="form-control" >
+                <div class="input-group-append">
+                <input type="button" onclick="sendIndexDelete()" value="Выбрать" class="btn btn-outline-secondary" >
+                </div>
+        </div>
+        <div class="line_botton" style="background: bisque; height: 3px; margin: 10px 0px;"></div>
+
+    <!--    Table with one record selected for change -->
+        <div id="table_issue"></div>
+        <div class="line_botton" style="background: bisque; height: 3px; margin: 10px 0px;"></div>
+
+    <!--    Select field for change -->
+            <div  class="input-group md-3">
+                <!--    Select field -->
+                <select id="select_issue" class="form-control"></select>
+                <!--    Change field -->
+                <div class="input-group-append">
+                    <input id="input_issue_change" type='text' class="form-control">
+                </div>
+                <!--    Button for change -->
+                <div class="input-group-append">
+                    <input id="button_issue_update" type="button" onclick="changeIssue()" value="Изменить" class="btn btn-outline-secondary" >
+                </div>
+            </div>
+    </div>
+</body>
+</html>

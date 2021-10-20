@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>REST</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #373a3c;
+            background-color: #fff;
+        }
+        table th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #eceeef;
+            color: #fff;
+            background-color: #373a3c;
+        }
+        table th, table td {
+            padding: 0.75rem;
+            border-top: 1px solid #eceeef;
+        }
+        table {
+            margin: auto;
+            margin-top: 100px;
+            text-align: left;
+            border-collapse: collapse;
+            border-spacing: 2px;
+        }
+        th {
+            display: table-cell;
+            font-weight: bold;
+        }
+        input {
+            font-size: 16pt;
+            color: #373a3c;
+        }
+        .insertDiv {
+            margin-top: 50px;
+        }
+        .nameInsert {
+            margin-bottom: 10px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .buttons span {
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            padding: .8em 1em calc(.8em + 3px);
+            border-radius: 3px;
+            background: rgb(64,199,129);
+            box-shadow: 0 -3px rgb(53,167,110) inset;
+            transition: 0.2s;
+        }
+        .buttons span:hover { background: rgb(53, 167, 110); }
+        .buttons span:active {
+            background: rgb(33,147,90);
+            box-shadow: 0 3px rgb(33,147,90) inset;
+        }
+        .buttonDelete {
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            padding: .8em 1em calc(.8em + 3px);
+            border-radius: 3px;
+            transition: 0.2s;
+            background:rgb(232, 95, 76);
+            box-shadow: 0 -3px  rgb(222,65,66) inset;
+        }
+        .buttonDelete:hover { background: rgb(222,65,66); }
+        .buttonDelete:active {
+            background: rgb(202,45,56);
+            box-shadow: 0 3px rgb(202,45,56) inset;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $.get('http://localhost:8081/info', function (data) {
+                console.log(data);
+                var text = "<table style='width: 80%'>" +
+                    "<tr>" +
+                    "<th>Номер</th>" +
+                    "<th>Имя</th>" +
+                    "<th>Телефон</th>" +
+                    "</tr>";
+                for (var i = 0; i < data.length; i++) {
+                    text += "<tr>" +
+                        "<td>" + (i + 1) + "</td>" +
+                        "<td>" + data[i].name + "</td>" +
+                        "<td>" + data[i].phone + "</td>" +
+                        "</tr>";
+                }
+                text += "</table>";
+                $(".user").html(text);
+            }).fail(function (data) {
+                console.log(data);
+                $(".user").html("NO");
+            });
+        })
+        function update() {
+            $.get('http://localhost:8081/info', function (data) {
+                console.log(data);
+                var text = "<table style='width: 80%'>" +
+                    "<tr>" +
+                    "<th>Номер</th>" +
+                    "<th>Имя</th>" +
+                    "<th>Телефон</th>" +
+                    "</tr>";
+                for (var i = 0; i < data.length; i++) {
+                    text += "<tr>" +
+                        "<td>" + (i + 1) + "</td>" +
+                        "<td>" + data[i].name + "</td>" +
+                        "<td>" + data[i].phone + "</td>" +
+                        "</tr>";
+                }
+                text += "</table>";
+                $(".user").html(text);
+            }).fail(function (data) {
+                console.log(data);
+                $(".user").html("NO");
+            });
+        }
+        function setUser() {
+            if (document.getElementById("name").value !== 0
+                && document.getElementById("phone").value !== 0) {
+                $.get("http://localhost:8081/insert?name="
+                    + document.getElementById("name").value + "&phone="
+                    + document.getElementById("phone").value,
+                    function (data) {
+                        console.log(data);
+                        alert("Insert Successful!");
+                    }
+                ).fail(function () {
+                    alert("Insert bad, try again!");
+                });
+            }
+        }
+        function replace() {
+            if (document.getElementById("name").value !== 0
+                && document.getElementById("phone").value !== 0) {
+                $.get("http://localhost:8081/update?name="
+                    + document.getElementById("name").value + "&phone="
+                    + document.getElementById("phone").value,
+                    function (data) {
+                        console.log(data);
+                        alert("Replace Successful!");
+                    }
+                ).fail(function () {
+                    alert("Replace bad, try again!");
+                });
+            }
+        }
+        function deleteUser() {
+            if (document.getElementById("name").value !== 0) {
+                $.get("http://localhost:8081/delete?name="
+                    + document.getElementById("name").value,
+                    function (data) {
+                        console.log(data);
+                        alert("Delete Successful!");
+                    }
+                ).fail(function () {
+                    alert("Delete bad, try again!");
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <div align="center">
+        <h2>Привет, Тренер!</h2>
+        <h3>Как твои ученики?</h3>
+    </div>
+    <div class="insertDiv" align="center">
+        <input id="name" type="text" class="nameInsert" placeholder="Введите Имя"><br>
+        <input id="phone" type="number" class="phoneInsert" placeholder="Введите Телефон"><br>
+        <select class="statusInsert">
+            <option>Будет заниматься</option>
+            <option>Занимается</option>
+            <option>Закончил</option>
+        </select><br>
+        <select class="levelInsert">
+            <option>Легкий тренинг</option>
+            <option>Средняя тренировка</option>
+            <option>Тяжелые нагрузки</option>
+        </select><br>
+        <input type="number" class="updateInsert" placeholder="Успеваемость[0/10]"><br>
+        <input type="text" class="commentInsert" placeholder="Введите комментарий"><br>
+    </div>
+    <div class="buttons" align="center">
+        <span type="button" class="buttonInsert"  id="buttonInsertId"  onclick="setUser()">Вставить</span>
+        <span type="button" class="buttonReplace" id="buttonReplaceId" onclick="replace()">Заменить</span>
+        <span type="button" class="buttonUpdate"  id="buttonUpdateId"  onclick="update()">Обновить</span>
+        <a type="button" class="buttonDelete"  id="buttonDeleteId"  onclick="deleteUser()">Удалить</a>
+    </div>
+    <div>
+        <p class="user"></p>
+    </div>
+
+</body>
+</html>
+

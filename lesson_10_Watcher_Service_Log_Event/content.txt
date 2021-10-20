@@ -1,0 +1,12 @@
+.
+
+/.
+/.gradle
+/.idea
+/build
+/src
+build.gradle
+content.txt
+gradle.properties
+log.txt
+settings.gradle

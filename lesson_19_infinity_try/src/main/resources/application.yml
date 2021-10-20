@@ -1,0 +1,25 @@
+server:
+  port: 8989
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/javacourse?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: slava
+    password: -----
+  thymeleaf:
+    cache: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+#Trouble with port, 3036 -> 3306
+#Trouble with connect to database with false charset(coding)
+#  Me should encoding in utf-8, database was in latin1 or iso-8859-1
+
+#Trouble with local and global access JMX service URL
+#   Failed to retrieve application JMX service URL
+#
+#Add option into Virtual Machine
+#VM Option
+#-Dcom.sun.management.jmxremote.port=8080
+#-Dcom.sun.management.jmxremote.authenticate=false
+#-Dcom.sun.management.jmxremote.ssl=false
